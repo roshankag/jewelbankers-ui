@@ -1,0 +1,159 @@
+/* Reset default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  h1 {
+    color: #333;
+    font-size: 2.5rem;
+    animation: slideDown1 1s ease-out;
+  }
+  
+  section {
+    margin-top: 30px;
+    margin-left: 380px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 380px;
+    animation: slideDown 1s ease-out;
+  }
+  
+  @keyframes slideDown1 {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideDown {
+    from {
+
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 8px;
+    color: #555;
+  }
+  
+  input[type="text"],
+  input[type="password"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  a {
+    margin-bottom: 10px;
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  a:hover {
+    color: #0056b3;
+  }
+  
+  button[type="submit"],
+  button[type="reset"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin-bottom: 12px;
+  }
+  button{
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin-bottom: 12px;
+  }
+  form div{
+    color: rgb(176, 33, 33);
+    animation: slideDown 1s ease-out
+  }
+/* Apply styles to the outer div */
+div {
+  margin: 20px; /* Example margin */
+}
+
+/* Style for mat-card */
+.mat-card {
+  width: 400px; /* Example width */
+  margin: auto; /* Center align */
+  background-color: azure; /* Azure blue background color */
+  border-radius: 8px; /* Example border radius */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Example box shadow */
+}
+
+/* Style for mat-card-title */
+.mat-card-title {
+  font-size: 24px; /* Larger font size for title */
+  font-weight: bold; /* Example font weight */
+  color: #333; /* Example text color */
+  padding: 16px; /* Padding for title */
+  background-color: #4682b4; /* Steel blue background color */
+  color: white; /* Text color for title */
+  border-top-left-radius: 8px; /* Rounded corners */
+  border-top-right-radius: 8px; /* Rounded corners */
+}
+
+/* Style for mat-card-content */
+.mat-card-content {
+  padding: 16px; /* Example padding */
+}
+
+/* Style for mat-list */
+.mat-list {
+  padding: 0; /* Remove default padding */
+}
+
+/* Style for mat-list-item */
+.mat-list-item {
+  padding: 12px 0; /* Example padding */
+  border-bottom: 1px solid #ccc; /* Example border bottom */
+}
+
+/* Style for mat-line (used inside mat-list-item) */
+.mat-line {
+  font-size: 10px; /* Smaller font size */
+  color: #555; /* Example text color */
+}
+h3{
+  font-size: 10px;
+}
+mat-card-title{
+  font-size: 20px;
+}
