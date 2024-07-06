@@ -31,7 +31,7 @@ export class RedeemComponent {
   
     constructor(private fb: FormBuilder, private router: Router) {
       this.redeemform = this.fb.group({
-        billserial: ['', [Validators.required, Validators.maxLength(2)]],
+        billSerial: ['', [Validators.required, Validators.maxLength(2)]],
         billno: ['', [Validators.required, Validators.maxLength(5)]],
         name: ['', [Validators.required, Validators.maxLength(21)]],
         customerid: ['', [Validators.required, Validators.maxLength(8)]],

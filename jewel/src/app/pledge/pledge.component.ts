@@ -18,7 +18,10 @@ import {AsyncPipe} from '@angular/common';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {default as _rollupMoment} from 'moment';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { Bill } from './Bill';
+import { get } from 'http';
+import { BillDetail } from './BillDetails';
 
 
 export const MY_FORMATS = {
@@ -44,26 +47,27 @@ export class PledgeComponent implements OnInit {
 
     billform : FormGroup;
     isBillSerialDisabled: boolean = true;
-    selectedCustomer: Data | undefined;
+    selectedCustomer: Customer | undefined;
 
   
   
     constructor(private fb: FormBuilder, private router: Router,private http:HttpClient,private renderer: Renderer2) {
       this.billform = this.fb.group({
-        billserial: [{disabled: true},[ Validators.maxLength(2)]],
-        billno: ['', [ Validators.maxLength(5)]],
-        name: [''],
-        customerid: ['', [ Validators.maxLength(8)]],
-        adrress: ['', []],
-        article: ['', []],
+        billSerial: [{disabled: true},[ Validators.maxLength(2)]],
+        billNo: ['', [ Validators.maxLength(5)]],
+        customerName: [''],
+        id: ['', [ Validators.maxLength(8)]],
+        Address: ['', []],
+        fullAddress: ['', []],
+        ProductTypeNo: ['', []],
         amount: ['', [ Validators.maxLength(8)]],
-        weight: ['', [ Validators.maxLength(5)]],
-        quantity: ['', [ Validators.maxLength(3)]],
-        description: ['' ],
-        presentvalue: ['', [ Validators.maxLength(8)]],
-        roi: ['', [ Validators.maxLength(3)]],
-        date: [new Date(), []],
-        amountinwords: ['', [ ]],
+        grams: ['', [ Validators.maxLength(5)]],
+        productQuantity: ['', [ Validators.maxLength(3)]],
+        productDescription: ['' ],
+        presentValue: ['', [ Validators.maxLength(8)]],
+        rateOfInterest: ['', [ Validators.maxLength(3)]],
+        billDate: [new Date(), []],
+        AmountInWords: ['', [ ]],
         totalgive: [''],
         intrestpledge: [''],
         phone:['']
@@ -75,23 +79,23 @@ export class PledgeComponent implements OnInit {
     }
     transcript: string = '';
     myControl = new FormControl('');
-    options: Data[]=[];
+    options: Customer[]=[];
     filteredOptions: Observable<string[]>|undefined ;
     
     ngOnInit() {
-      this.billform.patchValue({billserial:'B'})
+      this.billform.patchValue({billSerial:'B'})
       this.filteredOptions = this.myControl.valueChanges.pipe(
         startWith(""),
         map(value => this._filter(value || '')),
       );
       this.fetch();
-      this.billform.get('roi')!.valueChanges.subscribe(() => this.calculateIntrestPledgeAndTotalGive());
+      this.billform.get('rateOfInterest')!.valueChanges.subscribe(() => this.calculateIntrestPledgeAndTotalGive());
       this.billform.get('amount')!.valueChanges.subscribe(() => this.calculateIntrestPledgeAndTotalGive());
       this.billform.get('amount')!.valueChanges.subscribe(() => this.roiacess());
-      this.billform.get('article')!.valueChanges.subscribe(() => this.roiacess());
+      this.billform.get('ProductTypeNo')!.valueChanges.subscribe(() => this.roiacess());
       this.billform.get('amount')!.valueChanges.subscribe(() => this.presentvalue());
-      this.billform.get('weight')!.valueChanges.subscribe(() => this.presentvalue());
-      this.billform.get('article')!.valueChanges.subscribe(() => this.presentvalue());
+      this.billform.get('grams')!.valueChanges.subscribe(() => this.presentvalue());
+      this.billform.get('ProductTypeNo')!.valueChanges.subscribe(() => this.presentvalue());
 
         }
 
@@ -102,22 +106,82 @@ export class PledgeComponent implements OnInit {
                          .map(filteredOption => filteredOption.customerName);
     }
     
+
+    getBillDetails(){
+      const billDetail : BillDetail = {
+        productNo: (this.billform.get('productNo')?.value),
+        productDescription: (this.billform.get('productDescription')?.value) ,
+        productQuantity: (this.billform.get('productQuantity')?.value),
+      };
+      const billDetails:any[] = new Array;
+      billDetails.push(billDetail);    
+
+      return billDetails;
+    }
+
+    getCustomer(){
+      const customer : any = {
+        "id": parseInt(this.billform.get('id')?.value),
+        "area": "KELLAMBAKKAM",
+        "email": null,
+        "state": "TAMIL NADU",
+        "pincode": 603103,
+        "customerName": this.billform.get('customerName')?.value,
+        "street": "THAIYUR",
+        "district": "KANCHEEPURAM",
+        "country": "INDIA",
+        "relationShip": null,
+        "relationShipName": null
+      }
+    }
     onSubmit(form:any) {
       if (this.billform.valid) {
       console.log('Form submitted')
       console.log(this.billform.value);
+      const bill: Bill = {
+        // billSequence: parseInt(this.billform.get('billSequence')?.value),
+        amount: parseInt(this.billform.get('amount')?.value),
+        billSerial: String(this.billform.get('billSerial')?.value),
+        billDate: String(this.billform.get('billDate')?.value),
+        billNo: parseInt(this.billform.get('billNo')?.value),
+        careOf: String(this.billform.get('careOf')?.value),
+        productTypeNo: parseInt(this.billform.get('productTypeNo')?.value),
+        amountInWords: String(this.billform.get('amountInWords')?.value),
+        presentValue: parseInt(this.billform.get('presentValue')?.value),
+        grams: parseInt(this.billform.get('grams')?.value),
+        monthlyIncome: parseInt(this.billform.get('monthlyIncome')?.value),
+        redemptionDate: String(this.billform.get('redemptionDate')?.value),
+        redemptionInterest: parseInt(this.billform.get('redemptionInterest')?.value),
+        redemptionTotal: parseInt(this.billform.get('redemptionTotal')?.value),
+        redemptionStatus: String(this.billform.get('redemptionStatus')?.value),
+        billRedemSerial: String(this.billform.get('billRedemSerial')?.value),
+        billRedemNo: parseInt(this.billform.get('billRedemNo')?.value),
+        comments: String(this.billform.get('comments')?.value),
+        customer: {},
+        rateOfInterest: 0,
+        billDetails: this.getBillDetails()
+      }
 
-      this.router.navigate(["/login"])
+      const billDetails : BillDetail = {
+        productNo: parseInt(this.billform.get('productNo')?.value),
+        productDescription:this.billform.get('productDescription')?.value,
+        productQuantity: parseInt(this.billform.get('productQuantity')?.value),
+      }
+
+
+
+      this.saveCustomer(bill);
+      //this.router.navigate(["/login"])
       }
       
   }
     fetch() {
-      this.http.get<Data[]>('http://localhost:8080/customers').subscribe(
+      this.http.get<Customer[]>('http://localhost:8080/customers').subscribe(
         (resp) => {
           console.log(resp);
           this.options = resp.map(customer => ({
             ...customer,
-            address: `${customer.street}, ${customer.district}, ${customer.country} - ${customer.pincode}`
+            fullAddress: `${customer.street}, ${customer.district}, ${customer.country} - ${customer.pincode}`
           
           }));
         },
@@ -126,8 +190,22 @@ export class PledgeComponent implements OnInit {
         }
       );
     }
+
+    saveCustomer(bill: Bill) { 
+      const body=JSON.stringify(bill);
+      const headers  = { 'content-type': 'application/json'}  
+
+      this.http.post('http://localhost:8080/bills',body, {'headers':headers}).subscribe(
+        (resp) => {
+          console.log(resp);
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
+ }
   
-    displayFn(customer: Data): string {
+    displayFn(customer: Customer): string {
       return customer && customer.customerName ? customer.customerName : '';
     }   
     
@@ -136,10 +214,11 @@ export class PledgeComponent implements OnInit {
       console.log('called')
       const selectedCustomer = this.options.find(option => option.customerName === customerName);
       if (selectedCustomer) {
-        const address1 = `${selectedCustomer.street}, ${selectedCustomer.district}, ${selectedCustomer.country} - ${selectedCustomer.pincode}`;
-        this.billform.patchValue({ adrress: address1 });
-        console.log(address1)
-        this.billform.patchValue({ customerid: selectedCustomer.id });
+        const fullAddress1 = `${selectedCustomer.area}, ${selectedCustomer.street}, ${selectedCustomer.district}, ${selectedCustomer.country} - ${selectedCustomer.pincode}`;
+        console.log(fullAddress1)
+        this.billform.patchValue({ fullAddress: fullAddress1 });
+       
+        this.billform.patchValue({ id: selectedCustomer.id });
         this.billform.patchValue({ phone: selectedCustomer.id });
       }
     }
@@ -150,9 +229,9 @@ export class PledgeComponent implements OnInit {
       if (amount) {
         const amountValue = parseFloat(amount); // Convert input value to a number if needed
         const amountWords = this.convertAmountToWords(amountValue);
-        this.billform.patchValue({ amountinwords: amountWords });
+        this.billform.patchValue({ AmountInWords: amountWords });
       } else {
-        this.billform.patchValue({ amountinwords: '' }); // Handle case when amount is empty or invalid
+        this.billform.patchValue({ AmountInWords: '' }); // Handle case when amount is empty or invalid
       }
     }
   
@@ -224,19 +303,19 @@ export class PledgeComponent implements OnInit {
         const tot=wei*3000
         if (tot<=amo){
           const tot2=amo+200
-          this.billform.patchValue({presentvalue:tot2})
+          this.billform.patchValue({presentValue:tot2})
         }
         else if (tot>amo){
-          this.billform.patchValue({presentvalue:tot})
+          this.billform.patchValue({presentValue:tot})
         }
       else if(art=='Silver'){
         const tot=wei*35
         if (tot<=amo){
           const tot2=amo+100
-          this.billform.patchValue({presentvalue:tot2})
+          this.billform.patchValue({presentValue:tot2})
         }
         else if (tot>amo){
-          this.billform.patchValue({presentvalue:tot})
+          this.billform.patchValue({presentValue:tot})
         }
 
 
@@ -249,26 +328,26 @@ export class PledgeComponent implements OnInit {
     }
 
     roiacess(){
-      const art=this.billform.get('article')!.value;
+      const art=this.billform.get('ProductTypeNo')!.value;
       const amo=this.billform.get('amount')!.value;
 
-      if (art==='Gold'){
+      if (art==='5'){
         if(amo<10000){
-          this.billform.patchValue({roi:36})
+          this.billform.patchValue({rateOfInterest:36})
         }
         else if (amo>10000){
-          this.billform.patchValue({roi:24})
+          this.billform.patchValue({rateOfInterest:24})
         }
       }      
-      else if (art==='Silver'){
+      else if (art==='3'){
         this.billform.patchValue({
-          roi:48
+          rateOfInterest:48
         })
       }
 
     }
     calculateIntrestPledgeAndTotalGive() {
-      const roi = this.billform.get('roi')!.value;
+      const roi = this.billform.get('rateOfInterest')!.value;
       const amount = this.billform.get('amount')!.value;
   
       // Calculate intrestpledge (simple interest for demonstration purposes)
@@ -293,7 +372,7 @@ toggleBillSerialInput() {
  
   }    
   
-    interface Data {
+    interface Customer {
       id: any;
       area: any;
       email: any;

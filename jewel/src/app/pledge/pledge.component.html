@@ -14,15 +14,15 @@
     <mat-form-field class="example-full-width" id="bsno">
       <mat-label>Bill No.</mat-label>
       <mat-label></mat-label>
-      <input #bsnoInput id="bsno" matInput placeholder="Enter Bill Serial" maxlength="2" required formControlName="billserial" [disabled]="true">
+      <input #bsnoInput id="bsno" matInput placeholder="Enter Bill Serial" maxlength="2" required formControlName="billSerial" [disabled]="true">
     </mat-form-field>
     <mat-form-field floatLabel="always">
       <mat-label></mat-label>
-      <input matInput type="number" class="example-right-align" placeholder="00000"  formControlName="billno">
+      <input matInput type="number" class="example-right-align" placeholder="00000"  formControlName="billNo">
     </mat-form-field>
     <mat-form-field class="example-full-width">
         <mat-label>Customer Name</mat-label>
-        <input  matInput formControlName="name" [formControl]="myControl"  placeholder="Enter Customer Name" [matAutocomplete]="auto"  >
+        <input  matInput formControlName="customerName" [formControl]="myControl"  placeholder="Enter Customer Name" [matAutocomplete]="auto"  >
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCustomerSelected($event.option.value)">
           <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
             {{ option }}
@@ -33,19 +33,19 @@
 
     <mat-form-field floatLabel="always">
       <mat-label>Customer ID</mat-label>
-      <input matInput type="number" class="example-right-align" placeholder=""formControlName="customerid">
+      <input matInput type="number" class="example-right-align" placeholder=""formControlName="id">
       <span matTextPrefix></span>
 
     </mat-form-field>
 
     <mat-form-field class="example-full-width">
       <mat-label>Customer Address</mat-label>
-      <textarea matInput placeholder="Enter Customer Address" formControlName="adrress"></textarea>
+      <textarea matInput placeholder="Enter Customer Address" formControlName="fullAddress"></textarea>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Article</mat-label>
-      <mat-select formControlName="article">
+      <mat-select formControlName="productTypeNo">
         <mat-option value="Gold">Gold</mat-option>
         <mat-option value="Silver">Silver</mat-option>
         <mat-option value="Bronze">Bronze</mat-option>
@@ -61,25 +61,25 @@
     </mat-form-field>
     <mat-form-field floatLabel="always">
       <mat-label>Rate Of Intrest</mat-label>
-      <input matInput type="number" class="example-right-align" placeholder="Enter Intrest" value="36" formControlName="roi">
+      <input matInput type="number" class="example-right-align" placeholder="Enter Intrest" value="36" formControlName="rateOfInterest">
       <span matTextPrefix></span>
     </mat-form-field>
     <mat-form-field floatLabel="always">
       <mat-label>Present Value</mat-label>
-      <input matInput type="number" class="example-right-align" placeholder="0" formControlName="presentvalue">
+      <input matInput type="number" class="example-right-align" placeholder="0" formControlName="presentValue">
       <span matTextPrefix>₹</span>
       <span matTextSuffix>.00</span>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Pledge Date</mat-label>
-      <input matInput [matDatepicker]="dp" formControlName="date">
+      <input matInput [matDatepicker]="dp" formControlName="billDate">
       <mat-hint>MMMM DD, YYYY</mat-hint>
       <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
       <mat-datepicker #dp></mat-datepicker>
     </mat-form-field>
     <mat-form-field floatLabel="always">
       <mat-label>Weight</mat-label>
-      <input matInput type="number" class="example-right-align" placeholder="0" formControlName="weight">
+      <input matInput type="number" class="example-right-align" placeholder="0" formControlName="grams">
       <span matTextPrefix></span>
       <span matTextSuffix>gms</span>
     </mat-form-field>
@@ -91,20 +91,20 @@
     </mat-form-field>
     <mat-form-field floatLabel="always">
       <mat-label>Quantity</mat-label>
-      <input matInput type="number" class="example-right-align"  value="1" formControlName="quantity">
+      <input matInput type="number" class="example-right-align"  value="1" formControlName="productQuantity">
       <span matTextPrefix></span>
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label>Item Description</mat-label>
-      <textarea matInput placeholder="Ex.One gold...." formControlName="description"></textarea>
+      <textarea matInput placeholder="Ex.One gold...." formControlName="productDescription"></textarea>
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label>Amount in Words</mat-label>
-      <textarea matInput placeholder="" formControlName="amountinwords"></textarea>
+      <textarea matInput placeholder="" formControlName="amountInWords"></textarea>
     </mat-form-field>
   <mat-form-field>
-    <mat-label>Intrest</mat-label>
-    <input matInput type="number" class="example-right-align" placeholder="0" formControlName="intrestpledge">
+    <mat-label>Interst</mat-label>
+    <input matInput type="number" class="example-right-align" placeholder="0" formControlName="interstpledge">
     <span matTextPrefix>₹</span>
     <span matTextSuffix>.00</span>
   </mat-form-field>

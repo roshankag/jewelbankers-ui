@@ -98,7 +98,7 @@ export class AddCustomerComponent implements OnInit {
     onSubmit(form:any) {
       if (this.billform.valid) {
       const address = `${this.billform.value.area}, ${this.billform.value.street}, ${this.billform.value.country}, ${this.billform.value.pincode}`;
-      this.billform.patchValue({ address: address });
+      this.billform.patchValue({ Address: address });
       console.log('Form submitted');
       console.log(this.billform.value);
       this.router.navigate(["/pledge"])
@@ -108,7 +108,7 @@ export class AddCustomerComponent implements OnInit {
     fetch() {
       this.http.get<Data[]>('http://localhost:8080/customers').subscribe(
         (resp) => {
-          console.log(resp);
+          //console.log(resp);
           this.options = resp.map(customer => ({
             ...customer,
             address: `${customer.street}, ${customer.district}, ${customer.country} - ${customer.pincode}`
