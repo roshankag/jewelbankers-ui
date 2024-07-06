@@ -1,0 +1,10 @@
+{
+  "routes": [
+    "/",
+    "/addcustomer",
+    "/login",
+    "/pledge",
+    "/redeem",
+    "/setting"
+  ]
+}
