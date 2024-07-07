@@ -47,10 +47,10 @@ export class HomeComponent implements OnInit {
     }
   }
   public  fetch(){
-    this.http.get('http://127.0.0.1:8000/').subscribe(
+    this.http.get('http://localhost:8080/users').subscribe(
       (resp:any)=>{
         console.log(resp);
-        this.preciousMetals$ = resp;
+        // this.preciousMetals$ = resp;
       }
     )
   }

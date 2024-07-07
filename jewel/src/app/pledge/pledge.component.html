@@ -11,10 +11,14 @@
 
   <form action="/login" [formGroup]="billform"  (ngSubmit)="onSubmit(billform)">
 
+    <div *ngIf="alertMessage" class="alert" [ngClass]="{'success': isSuccess, 'error': !isSuccess}">
+      {{ alertMessage }}
+    </div>
+    
     <mat-form-field class="example-full-width" id="bsno">
       <mat-label>Bill No.</mat-label>
       <mat-label></mat-label>
-      <input #bsnoInput id="bsno" matInput placeholder="Enter Bill Serial" maxlength="2" required formControlName="billSerial" [disabled]="true">
+      <input #bsnoInput id="bsno" matInput placeholder="Enter Bill Serial" maxlength="2" required formControlName="billSerial" >
     </mat-form-field>
     <mat-form-field floatLabel="always">
       <mat-label></mat-label>
@@ -24,10 +28,15 @@
         <mat-label>Customer Name</mat-label>
         <input  matInput formControlName="customerName" [formControl]="myControl"  placeholder="Enter Customer Name" [matAutocomplete]="auto"  >
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCustomerSelected($event.option.value)">
+          @for (option of options; track option) {
+            <mat-option [value]="option.customerName">{{option.customerName}}</mat-option>
+          }
+        </mat-autocomplete>
+        <!-- <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCustomerSelected($event.option.value)">
           <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
             {{ option }}
           </mat-option>
-        </mat-autocomplete>
+        </mat-autocomplete> -->
       
     </mat-form-field>
 
@@ -100,7 +109,7 @@
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label>Amount in Words</mat-label>
-      <textarea matInput placeholder="" formControlName="amountInWords"></textarea>
+      <textarea matInput placeholder="" formControlName="AmountInWords"></textarea>
     </mat-form-field>
   <mat-form-field>
     <mat-label>Interst</mat-label>

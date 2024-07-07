@@ -44,7 +44,7 @@ export class RedeemComponent {
         presentvalue: ['', [Validators.required, Validators.maxLength(8)]],
         roi: ['', [Validators.required, Validators.maxLength(3)]],
         date: ['', [Validators.required]],
-        amountinwords: ['', [Validators.required]],
+        AmountInWords: ['', [Validators.required]],
         redeemdate: ['', [Validators.required]],
         total: ['', [Validators.required]],
         intrest: ['', [Validators.required]],

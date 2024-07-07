@@ -1,4 +1,4 @@
-import { Component , OnInit,Renderer2, ViewChild } from '@angular/core';
+import { Component , ElementRef, OnInit,Renderer2, ViewChild } from '@angular/core';
 import {ChangeDetectionStrategy} from '@angular/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule} from '@angular/material/input';
@@ -22,6 +22,7 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { Bill } from './Bill';
 import { get } from 'http';
 import { BillDetail } from './BillDetails';
+import { Customer } from '../add-customer/Customer';
 
 
 export const MY_FORMATS = {
@@ -46,20 +47,21 @@ export const MY_FORMATS = {
 export class PledgeComponent implements OnInit {
 
     billform : FormGroup;
-    isBillSerialDisabled: boolean = true;
+    isBillSerialDisabled: boolean = false;
     selectedCustomer: Customer | undefined;
+isSuccess: boolean = false;
+alertMessage: string = "";
+  
 
-  
-  
     constructor(private fb: FormBuilder, private router: Router,private http:HttpClient,private renderer: Renderer2) {
       this.billform = this.fb.group({
-        billSerial: [{disabled: true},[ Validators.maxLength(2)]],
+        billSerial: [{disabled: false},[ Validators.maxLength(2)]],
         billNo: ['', [ Validators.maxLength(5)]],
         customerName: [''],
         id: ['', [ Validators.maxLength(8)]],
         Address: ['', []],
         fullAddress: ['', []],
-        ProductTypeNo: ['', []],
+        productTypeNo: ['', []],
         amount: ['', [ Validators.maxLength(8)]],
         grams: ['', [ Validators.maxLength(5)]],
         productQuantity: ['', [ Validators.maxLength(3)]],
@@ -69,7 +71,7 @@ export class PledgeComponent implements OnInit {
         billDate: [new Date(), []],
         AmountInWords: ['', [ ]],
         totalgive: [''],
-        intrestpledge: [''],
+        interstpledge: [''],
         phone:['']
         
       });
@@ -84,18 +86,21 @@ export class PledgeComponent implements OnInit {
     
     ngOnInit() {
       this.billform.patchValue({billSerial:'B'})
+      
       this.filteredOptions = this.myControl.valueChanges.pipe(
         startWith(""),
         map(value => this._filter(value || '')),
       );
+
+
       this.fetch();
       this.billform.get('rateOfInterest')!.valueChanges.subscribe(() => this.calculateIntrestPledgeAndTotalGive());
       this.billform.get('amount')!.valueChanges.subscribe(() => this.calculateIntrestPledgeAndTotalGive());
       this.billform.get('amount')!.valueChanges.subscribe(() => this.roiacess());
-      this.billform.get('ProductTypeNo')!.valueChanges.subscribe(() => this.roiacess());
+      this.billform.get('productTypeNo')!.valueChanges.subscribe(() => this.roiacess());
       this.billform.get('amount')!.valueChanges.subscribe(() => this.presentvalue());
       this.billform.get('grams')!.valueChanges.subscribe(() => this.presentvalue());
-      this.billform.get('ProductTypeNo')!.valueChanges.subscribe(() => this.presentvalue());
+      this.billform.get('presentValue')!.valueChanges.subscribe(() => this.presentvalue());
 
         }
 
@@ -103,7 +108,7 @@ export class PledgeComponent implements OnInit {
       const filterValue = value.toLowerCase();
       // Filter options based on customerName and map to an array of strings
       return this.options.filter(option => option.customerName.toLowerCase().includes(filterValue))
-                         .map(filteredOption => filteredOption.customerName);
+                          .map(filteredOption => filteredOption.customerName);
     }
     
 
@@ -120,7 +125,7 @@ export class PledgeComponent implements OnInit {
     }
 
     getCustomer(){
-      const customer : any = {
+      const customer : Customer = {
         "id": parseInt(this.billform.get('id')?.value),
         "area": "KELLAMBAKKAM",
         "email": null,
@@ -131,33 +136,37 @@ export class PledgeComponent implements OnInit {
         "district": "KANCHEEPURAM",
         "country": "INDIA",
         "relationShip": null,
-        "relationShipName": null
+        "relationShipName": null,
+        "phone": null,
+        "mobileNo": null,
+        "address": null
       }
+      return customer;
     }
     onSubmit(form:any) {
       if (this.billform.valid) {
       console.log('Form submitted')
       console.log(this.billform.value);
       const bill: Bill = {
-        // billSequence: parseInt(this.billform.get('billSequence')?.value),
+       // billSequence: parseInt(this.billform.get('billSequence')?.value),
         amount: parseInt(this.billform.get('amount')?.value),
         billSerial: String(this.billform.get('billSerial')?.value),
         billDate: String(this.billform.get('billDate')?.value),
         billNo: parseInt(this.billform.get('billNo')?.value),
-        careOf: String(this.billform.get('careOf')?.value),
+        careOf: this.billform.get('careOf')?.value != null?this.billform.get('careOf')?.value:null,
         productTypeNo: parseInt(this.billform.get('productTypeNo')?.value),
-        amountInWords: String(this.billform.get('amountInWords')?.value),
+        amountInWords: String(this.billform.get('AmountInWords')?.value),
         presentValue: parseInt(this.billform.get('presentValue')?.value),
         grams: parseInt(this.billform.get('grams')?.value),
         monthlyIncome: parseInt(this.billform.get('monthlyIncome')?.value),
-        redemptionDate: String(this.billform.get('redemptionDate')?.value),
+        redemptionDate: this.billform.get('redemptionDate')?.value != null?this.billform.get('redemptionDate')?.value:null,
         redemptionInterest: parseInt(this.billform.get('redemptionInterest')?.value),
         redemptionTotal: parseInt(this.billform.get('redemptionTotal')?.value),
-        redemptionStatus: String(this.billform.get('redemptionStatus')?.value),
-        billRedemSerial: String(this.billform.get('billRedemSerial')?.value),
+        redemptionStatus: this.billform.get('redemptionStatus')?.value != null?this.billform.get('redemptionStatus')?.value:null,
+        billRedemSerial: this.billform.get('billRedemSerial')?.value != null?this.billform.get('billRedemSerial')?.value:null,
         billRedemNo: parseInt(this.billform.get('billRedemNo')?.value),
-        comments: String(this.billform.get('comments')?.value),
-        customer: {},
+        comments: this.billform.get('comments')?.value != null?this.billform.get('comments')?.value:null,
+        customer: this.getCustomer(),
         rateOfInterest: 0,
         billDetails: this.getBillDetails()
       }
@@ -171,19 +180,22 @@ export class PledgeComponent implements OnInit {
 
 
       this.saveCustomer(bill);
+      this.isSuccess = true;
+      //this.alertMessage = "Bill saved successfully!" 
+      //alert('Bill saved successfully!');
       //this.router.navigate(["/login"])
       }
-      
   }
     fetch() {
       this.http.get<Customer[]>('http://localhost:8080/customers').subscribe(
         (resp) => {
-          console.log(resp);
+          // console.log(resp);
           this.options = resp.map(customer => ({
             ...customer,
-            fullAddress: `${customer.street}, ${customer.district}, ${customer.country} - ${customer.pincode}`
+            address: `${customer.street}, ${customer.district}, ${customer.country} - ${customer.pincode}`
           
           }));
+          console.log("options length"+this.options.length);
         },
         (error) => {
           console.error('Error fetching data:', error);
@@ -193,11 +205,14 @@ export class PledgeComponent implements OnInit {
 
     saveCustomer(bill: Bill) { 
       const body=JSON.stringify(bill);
-      const headers  = { 'content-type': 'application/json'}  
+      const headers  = new HttpHeaders({ 'Content-Type': 'application/json'})
+  //     const headers= new HttpHeaders()
+  // .set('content-type', 'application/json')
+  // .set('Access-Control-Allow-Origin', '*');  
 
-      this.http.post('http://localhost:8080/bills',body, {'headers':headers}).subscribe(
+      this.http.post('http://localhost:8080/bills',body, {headers}).subscribe(
         (resp) => {
-          console.log(resp);
+          //console.log(resp);
         },
         (error) => {
           console.error('Error fetching data:', error);
@@ -211,13 +226,14 @@ export class PledgeComponent implements OnInit {
     
   
     onCustomerSelected(customerName: string) {
-      console.log('called')
+      console.log('called');
       const selectedCustomer = this.options.find(option => option.customerName === customerName);
       if (selectedCustomer) {
+        console.log("selected");
         const fullAddress1 = `${selectedCustomer.area}, ${selectedCustomer.street}, ${selectedCustomer.district}, ${selectedCustomer.country} - ${selectedCustomer.pincode}`;
         console.log(fullAddress1)
         this.billform.patchValue({ fullAddress: fullAddress1 });
-       
+        this.billform.patchValue({customerName:selectedCustomer.customerName});
         this.billform.patchValue({ id: selectedCustomer.id });
         this.billform.patchValue({ phone: selectedCustomer.id });
       }
@@ -227,6 +243,7 @@ export class PledgeComponent implements OnInit {
       const amount = inputElement.value;
   
       if (amount) {
+        console.log(amount)
         const amountValue = parseFloat(amount); // Convert input value to a number if needed
         const amountWords = this.convertAmountToWords(amountValue);
         this.billform.patchValue({ AmountInWords: amountWords });
@@ -328,7 +345,7 @@ export class PledgeComponent implements OnInit {
     }
 
     roiacess(){
-      const art=this.billform.get('ProductTypeNo')!.value;
+      const art=this.billform.get('productTypeNo')!.value;
       const amo=this.billform.get('amount')!.value;
 
       if (art==='5'){
@@ -372,20 +389,6 @@ toggleBillSerialInput() {
  
   }    
   
-    interface Customer {
-      id: any;
-      area: any;
-      email: any;
-      phone: any;
-      pincode: any;
-      customerName: any;
-      street: any;
-      district: any;
-      country: any;
-      relationShip: any;
-      relationShipName: any;
-      address?:any;
-    }
     interface Window {
   webkitSpeechRecognition: any;
 }
