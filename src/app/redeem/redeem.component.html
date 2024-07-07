@@ -1,0 +1,137 @@
+<header>
+    <a href="/search">Search</a>
+    <a href="/pledge">Pledge Bill</a>
+    <a href="/login">Home</a>
+    <a href="/print">Print</a>
+    <a href="/ledger">Ledger</a>
+    <a href="/setting">Setting</a>
+  </header>
+  <section>
+    <br><br><br>
+    <form action="/login" [formGroup]="redeemform"  (ngSubmit)="onSubmit(redeemform)">
+        <mat-form-field class="example-full-width">
+            <mat-label>Redemption Bill No.</mat-label>
+            <mat-label></mat-label>
+            <input matInput placeholder="Enter Customer Name" maxlength="2" required formControlName="redeemserial">
+          </mat-form-field>
+          <mat-form-field floatLabel="always">
+            <mat-label></mat-label>
+            <input matInput type="number" class="example-right-align" placeholder="00000"  formControlName="redeemno">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Redeeming Date</mat-label>
+            <input matInput [matDatepicker]="dp" formControlName="redeemdate">
+            <mat-hint>MMMM DD, YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field floatLabel="always">
+            <mat-label>Intrest</mat-label>
+            <input matInput type="number" class="example-right-align" placeholder="0" formControlName="intrest">
+            <span matTextPrefix>₹</span>
+            <span matTextSuffix>.00</span>
+          </mat-form-field>
+          <br>
+          <mat-form-field floatLabel="always">
+            <mat-label>Total Amount</mat-label>
+            <input matInput type="number" class="example-right-align" placeholder="0" formControlName="total">
+            <span matTextPrefix>₹</span>
+            <span matTextSuffix>.00</span>
+          </mat-form-field>
+
+          
+        <!-- bill details -->
+      <mat-form-field class="example-full-width">
+        <mat-label>Bill No.</mat-label>
+        <mat-label></mat-label>
+        <input matInput placeholder="Enter Customer Name" maxlength="2" required formControlName="billSerial">
+      </mat-form-field>
+      <mat-form-field floatLabel="always">
+        <mat-label></mat-label>
+        <input matInput type="number" class="example-right-align" placeholder="00000"  formControlName="billno">
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Customer Name</mat-label>
+        <input matInput placeholder="Enter Customer Name" formControlName="name">
+      </mat-form-field>
+      <br>
+      <mat-form-field floatLabel="always">
+        <mat-label>Customer ID</mat-label>
+        <input matInput type="number" class="example-right-align" placeholder=""formControlName="customerid">
+        <span matTextPrefix></span>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width">
+        <mat-label>Customer Address</mat-label>
+        <textarea matInput placeholder="Enter Customer Address" formControlName="adrress"></textarea>
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <mat-label>Article</mat-label>
+        <mat-select formControlName="article">
+          <mat-option value="5">Gold</mat-option>
+          <mat-option value="3">Silver</mat-option>
+          <mat-option value="6">Bronze</mat-option>
+          <mat-option value="7">Copper</mat-option>
+          <mat-option value="Others">Others</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br>
+      <mat-form-field floatLabel="always">
+        <mat-label>Amount</mat-label>
+        <input matInput type="number" class="example-right-align" placeholder="0" formControlName="amount">
+        <span matTextPrefix>₹</span>
+        <span matTextSuffix>.00</span>
+      </mat-form-field>
+      <br>
+      <mat-form-field floatLabel="always">
+        <mat-label>Present Value</mat-label>
+        <input matInput type="number" class="example-right-align" placeholder="0" formControlName="presentvalue">
+        <span matTextPrefix>₹</span>
+        <span matTextSuffix>.00</span>
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <mat-label>Pledge Date</mat-label>
+        <input matInput [matDatepicker]="dp" formControlName="date">
+        <mat-hint>MMMM DD, YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+        <mat-datepicker #dp></mat-datepicker>
+      </mat-form-field>
+      <br>
+      <mat-form-field floatLabel="always">
+        <mat-label>Weight</mat-label>
+        <input matInput type="number" class="example-right-align" placeholder="0" formControlName="weight">
+        <span matTextPrefix></span>
+        <span matTextSuffix>gms</span>
+      </mat-form-field>
+      <br>
+      <mat-form-field floatLabel="always">
+        <mat-label>Quantity</mat-label>
+        <input matInput type="number" class="example-right-align"  value="1" formControlName="quantity">
+        <span matTextPrefix></span>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width">
+        <mat-label>Item Description</mat-label>
+        <textarea matInput placeholder="Ex.One gold...." formControlName="description"></textarea>
+      </mat-form-field>
+      <br>
+      <mat-form-field floatLabel="always">
+        <mat-label>Rate Of Intrest</mat-label>
+        <input matInput type="number" class="example-right-align" placeholder="Enter Intrest" value="36"formControlName="roi">
+        <span matTextPrefix></span>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width">
+        <mat-label>Amount in Words</mat-label>
+        <textarea matInput placeholder="" formControlName="amountinwords"></textarea>
+      </mat-form-field>
+      <div>
+        <button class="btn btn-primary" > SAVE </button>
+        <button type="reset" (click)="redeemform.reset()">RESET</button>
+        <button>Print</button><button>Search</button>
+      </div>
+    </form>
+  </section>
+  

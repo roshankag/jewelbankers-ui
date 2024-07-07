@@ -1,0 +1,47 @@
+    <header> <h1>LOGIN PAGE</h1></header>
+    <section>
+    <form action="\login" [formGroup]="loginForm"  (ngSubmit)="onSubmit(loginForm)" >
+        <label for="">Username</label>
+        <input type="text" placeholder="Enter Username" maxlength="21" required formControlName="username">      
+        <div *ngIf="loginForm.controls['username'].invalid && (loginForm.controls['username'].touched ||loginForm.controls['username']?.dirty) ">
+            <div *ngIf="loginForm.controls['username'].errors?.['required']">Username is required</div>
+            <div *ngIf="loginForm.controls['username'].errors?.['maxlength']">Minimum 20 characters required for Username</div>     
+        </div>
+        <br>
+        <label for="">Password</label>
+        <input type="password" name="" id="" placeholder="Enter password" maxlength="21" required formControlName="password">
+        <div *ngIf="loginForm.controls['password'].invalid && (loginForm.controls['password'].touched ||loginForm.controls['password']?.dirty) ">
+            <div *ngIf="loginForm.controls['password'].errors?.['required']">password is required</div>
+        </div>
+        <br>
+        <a href="\forget">Forget Password</a>
+        <a href="\new">New registration?</a>
+        <button class="btn btn-primary" > Submit </button>
+        <button type="reset" (click)="loginForm.reset()">RESET</button>
+    </form>
+    <div>
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Precious Metal Prices</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-list>
+              <mat-list-item>
+                <h3 mat-line>Gold 18k Price per Gram: {{ preciousMetals$.gold_18k_price_per_gram | number:'1.2-2' }}</h3>
+              </mat-list-item>
+              <mat-list-item>
+                <h3 mat-line>Gold 22k Price per Gram: {{ preciousMetals$.gold_22k_price_per_gram | number:'1.2-2' }}</h3>
+              </mat-list-item>
+              <mat-list-item>
+                <h3 mat-line>Gold 24k Price per Gram: {{ preciousMetals$.gold_24k_price_per_gram | number:'1.2-2' }}</h3>
+              </mat-list-item>
+              <mat-list-item>
+                <h3 mat-line>Silver Price per Gram: {{ preciousMetals$.silver_price_per_gram | number:'1.2-2' }}</h3>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      
+    </section>
+
