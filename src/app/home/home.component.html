@@ -1,6 +1,6 @@
     <header> <h1>LOGIN PAGE</h1></header>
     <section>
-    <form action="\login" [formGroup]="loginForm"  (ngSubmit)="onSubmit(loginForm)" >
+    <form action="\login" [formGroup]="loginForm"  (ngSubmit)="login(loginForm)" >
         <label for="">Username</label>
         <input type="text" placeholder="Enter Username" maxlength="21" required formControlName="username">      
         <div *ngIf="loginForm.controls['username'].invalid && (loginForm.controls['username'].touched ||loginForm.controls['username']?.dirty) ">
@@ -15,7 +15,6 @@
         </div>
         <br>
         <a href="\forget">Forget Password</a>
-        <a href="\new">New registration?</a>
         <button class="btn btn-primary" > Submit </button>
         <button type="reset" (click)="loginForm.reset()">RESET</button>
     </form>

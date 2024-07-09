@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Add User</h1>
+<div mat-dialog-content>
+  <form [formGroup]="addUserForm">
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username">
+    </mat-form-field>
+    <div>
+      <label *ngFor="let role of roles">
+        <mat-checkbox [value]="role" (change)="onCheckboxChange($event)">{{ role }}</mat-checkbox>
+      </label>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="onSubmit()">Add</button>
+</div>
