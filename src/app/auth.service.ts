@@ -8,13 +8,13 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8003/api/auth';
+  private apiUrl = 'http://localhost:8003';
 
   constructor(private http: HttpClient) {
    }
 
    signIn(username: string, password: string): Observable<any> {
-    const url = `${this.apiUrl}/signin`;
+    const url = `${this.apiUrl}/api/auth/signin`;
     const body = {
       username: username,
       password: password
@@ -29,6 +29,16 @@ export class AuthService {
     );
   }
 
+
+  forgotPassword(email:any):Observable<any>{
+    return this.http.post(`${this.apiUrl}/forgot-password/send-mail`, email).pipe(
+      tap((response:any) => {
+       
+      }, error => {
+      })
+    );
+  }
+
   signUp(signupdata: any): Observable<any> {
 
     const token = sessionStorage.getItem('accessToken');
@@ -37,7 +47,7 @@ export class AuthService {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
 
-    const url = `${this.apiUrl}/signup`;
+    const url = `${this.apiUrl}/api/auth/signup`;
     const body = signupdata
     return this.http.post(url, body, {headers}).pipe(
       tap((response:any) => {
@@ -86,5 +96,9 @@ export class AuthService {
     if(typeof window !== 'undefined' && sessionStorage){
       sessionStorage.clear();
     }
+  }
+
+  resetPassword(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password/reset-password`, data);
   }
 }

@@ -16,6 +16,9 @@ import {AuthService} from '../auth.service';
 import { NgxToastNotifyService } from 'ngx-toast-notify';
 import { AppConstants } from '../common/appconstants';
 import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
+
+declare var google: any; 
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -26,6 +29,7 @@ export class HomeComponent implements OnInit {
   googleURL = AppConstants.GOOGLE_AUTH_URL;
   loginForm : FormGroup;
   public preciousMetals$: PreciousMetals = new PreciousMetals;
+  apiUrl: any = "http://localhost:8003";
   constructor(private fb: FormBuilder, private router: Router,private http:HttpClient,private authService: AuthService,  private toastr: NgxToastNotifyService) {
     this.loginForm= new FormGroup({
       username: new FormControl("",[Validators.required,Validators.maxLength(21)]),
@@ -69,7 +73,54 @@ export class HomeComponent implements OnInit {
     //Changed the above URL where you want user to be redirected
   }
 
+  initGoogleSignIn() {
+    google.accounts.id.initialize({
+      client_id: "652919857197-t0gtmj7oqs7qrje4nfecln53he2d2spd.apps.googleusercontent.com",
+      callback: this.handleGoogleSignInResponse.bind(this)
+    });
+    google.accounts.id.renderButton(document.getElementById('google-signin-button'), {
+      theme: 'outline',
+      size: 'large'
+    });
+  }
+
+  handleGoogleSignInResponse(response: any) {
+    if (response.error) {
+      console.error('Google Sign-In error:', response.error);
+      // Handle error
+    } else {
+      const idToken = response.credential;
+      // Send idToken to backend for validation and JWT generation
+      this.sendTokenToBackend(idToken);
+    }
+  }
+
+  sendTokenToBackend(idToken: string) {
+    // Send idToken to backend for validation and JWT generation
+    this.http.post<any>(`${this.apiUrl}/social/loginSuccess`, { credential: idToken })
+      .subscribe(
+        response => {
+          if (response && response.token) {
+            this.saveToken(response.token);
+            this.router.navigate(['/admin-dashboard']); // Navigate to dashboard or any secured route
+          } else {
+            console.error('Failed to receive token');
+            // Handle error
+          }
+        },
+        error => {
+          console.error('Error processing login:', error);
+          // Handle error
+        }
+      );
+  }
+
+  saveToken(token: string) {
+    sessionStorage.setItem('accessToken', token); // Save token in cookie for 7 days (adjust as needed)
+  }
+
   ngOnInit(){
+    this.initGoogleSignIn();
     console.log(this.authService.getUserData());
     
     if(this.authService.getUserData().accessToken && this.authService.getUserData().roles?.includes('ROLE_ADMIN')){

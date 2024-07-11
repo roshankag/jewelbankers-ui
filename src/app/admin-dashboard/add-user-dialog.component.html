@@ -14,10 +14,18 @@
       <input matInput formControlName="username">
     </mat-form-field>
     <div>
-      <label *ngFor="let role of roles">
-        <mat-checkbox [value]="role" (change)="onCheckboxChange($event)">{{ role }}</mat-checkbox>
+      <label>
+        <input type="checkbox" value="admin" (change)="updateCheckbox('admin', $event)">
+        Admin
       </label>
     </div>
+    <div>
+      <label>
+        <input type="checkbox" value="user" (change)="updateCheckbox('user', $event)">
+       User
+      </label>
+    </div><p>Checked Values: {{ checkboxValues }}</p>
+    
   </form>
 </div>
 <div mat-dialog-actions>

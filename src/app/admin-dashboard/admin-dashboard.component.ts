@@ -5,6 +5,10 @@ import { ColDef, ICellRendererParams } from 'ag-grid-community';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from 'express';
 import { AddUserDialogComponent } from './add-user-dialog.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+
+
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
@@ -14,13 +18,22 @@ export class AdminDashboardComponent {
   columnDefs = [
     { headerName: 'ID', field: 'id' },
     { headerName: 'Username', field: 'username' },
-    { headerName: 'Email', field: 'email' },
+    { headerName: 'Email', field: 'email'},
     { headerName: 'Roles', field: 'rolesString' },
-    // { headerName: 'Actions', cellRenderer: ActionCellRendererComponent1 },
+    { headerName: 'Actions', cellRenderer: CustomButtonComponent,cellRendererParams: { onClick: this.onDelete.bind(this) }  },
   ];
   rowData: any[] = [];
+  gridApi: any;
+  teachers: any;
 
+  rowHeight = 50;
+  onGridReady(param: any) {
+    this.gridApi = param.api;
+    this.gridApi.sizeColumnsToFit();
+  }
   constructor(private userService: UserService, public dialog: MatDialog) { }
+
+  
 
   ngOnInit(): void {
     console.log('gellooo');
@@ -51,7 +64,37 @@ export class AdminDashboardComponent {
   }
 
   onDelete(id: number) {
+
+    
     console.log('Delete user', id);
     // Implement delete functionality here
+  }
+}
+@Component({
+  standalone: true,
+  imports: [MatButtonModule, MatIconModule],
+  template: `
+    <button mat-flat-button color="warn" (click)="buttonClicked()">
+      <mat-icon>delete</mat-icon>
+      Delete User
+    </button>
+  `,
+})
+export class CustomButtonComponent implements ICellRendererAngularComp {
+  private params: any;
+
+  agInit(params: ICellRendererParams): void {
+    this.params = params;
+  }
+
+  refresh(params: ICellRendererParams): boolean {
+    this.params = params;
+    return true;
+  }
+
+  buttonClicked() {
+    if (this.params.onClick) {
+      this.params.onClick(this.params.data.username);
+    }
   }
 }
