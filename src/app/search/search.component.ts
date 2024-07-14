@@ -19,8 +19,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {default as _rollupMoment} from 'moment';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-
-
+import { Bill } from '../pledge/Bill';
 
 @Component({
   selector: 'app-search',
@@ -30,7 +29,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   styleUrl: './search.component.css'
 })
 export class SearchComponent implements OnInit {
-  billform: FormGroup;
+  searchform: FormGroup;
+  bills!: Bill[];
+  // bills: Bill[] = [];  
   isBillSerialDisabled: boolean = true;
   selectedCustomer: Data | undefined;
 
@@ -45,13 +46,13 @@ export class SearchComponent implements OnInit {
     private http: HttpClient,
     private renderer: Renderer2
   ) {
-    this.billform = this.fb.group({
+    this.searchform = this.fb.group({
       search: [''],
     });
   }
 
   ngOnInit() {
-    this.billform.patchValue({ billserial: 'B' });
+    this.searchform.patchValue({ billserial: 'B' });
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),
@@ -80,29 +81,69 @@ export class SearchComponent implements OnInit {
     );
   }
   onSubmit(form: any) {
-    if (this.billform.valid) {
+    if (this.searchform.valid) {
+      let flag=0;
+
       const value = this.myControl.value?.trim(); // Use optional chaining to handle undefined values
       let searchParams = {};
-  
+      let billNo = this.myControl.value;
+      console.log(billNo)
+      const billSerial=billNo?.charAt(0);
+      const a=billNo?.slice(1)
+      const customerName=this.myControl.value;
+
       if (value) {
-        if (/^[A-Za-z]\d{5}$/.test(value)) {
-          // It's a bill number
+        if (/^[A-Za-z]\d{4}$/.test(value)) {
+          flag =1;
           searchParams = { bill_no: value };
         } else if (/\d{5}/.test(value)) {
-          // It's an address (assuming addresses contain digits like pincode)
+          flag=2;
           searchParams = { address: value };
         } else {
-          // Default to customer name if it's not a bill number or address
           searchParams = { customerName: value };
+          flag=2;
         }
   
         console.log('Form submitted');
-        console.log(this.billform.value);
+        console.log(this.searchform.value);
         console.log('Search Parameters:', searchParams);
   
         } else {
         console.error('Search value is undefined');
       }
+      const searchvalue = this.myControl.value;
+      console.log("searchvalue"+searchvalue)
+      // if (customerName) {
+      //   const url =`http://localhost:8080/customers/search?customerName=${customerName}`
+      if (searchvalue){
+        // const url = `http://localhost:8080/bills/number?billNo=${a}&billSerial=${billSerial}`;
+        const url = `http://localhost:8080/bills/search?customerName=${searchvalue}&billNo=${searchvalue}`
+        this.http.get<[]>(url).subscribe(
+          (response:any) => {
+            console.log('Bill details:', response);
+
+            this.bills = response.content;
+            this.bills = response;
+            console.log(this.bills);
+            
+          },
+          (error) => {
+            console.error('Error fetching bill details:', error);
+          }
+        );
+      }
+
+        // this.http.get(url).subscribe(
+        //   (response) => {
+        //     console.log('Bill details:', response);
+        //     this.bill= response[0];
+        //     // Handle the response as needed
+        //   },
+        //   (error) => {
+        //     console.error('Error fetching bill details:', error);
+        //   }
+        // )
+
     }
   }
     
@@ -122,3 +163,7 @@ interface Data {
   relationShipName: any;
   address?: any;
 }
+
+
+
+

@@ -1,4 +1,4 @@
-<p>setting works!</p>
+
 <header>
     <a href="/">Search</a>
     <a href="/login">Home</a>
@@ -9,15 +9,34 @@
   </header>
   <section>
   
-    <form action="/login" [formGroup]="billform"  (ngSubmit)="onSubmit(billform)">
+    <form [formGroup]="settingForm" (ngSubmit)="onSubmit(settingForm)">
+      <table *ngIf="filteredOptions | async as list"><tr> 
+        <th>ID</th>
+        <th>Value</th>
+        <th>Example</th>
+      </tr>
+        <div *ngFor="let setting of list">
+          <tr>
+          <!-- <td>paramSeq:{{ setting.paramSeq }}</td> -->
+          <td>{{ setting.paramId }}</td>
+          <td>
+          <mat-form-field class="example-full-width" id="bsno">         
+          <input #bsnoInput id="bsno" matInput placeholder="Update Value" required formControlName="billPledgeSerial" >
+        </mat-form-field></td>
+          <td>{{ setting.paramExample }}</td> 
+        </tr>
+        </div>
+      </table>
+ 
+    
   
-      <mat-form-field class="example-full-width" id="bsno">
-        <mat-label>Current Bill No.</mat-label>
+      <!-- <mat-form-field class="example-full-width" id="bsno">
+        <mat-label>{{settings}}</mat-label>
         <mat-label></mat-label>
-        <input #bsnoInput id="bsno" matInput placeholder="Enter Bill Serial" maxlength="2" required formControlName="billPledgeSerial" >
-    </mat-form-field>
+        <!-- <input #bsnoInput id="bsno" matInput placeholder="Enter Bill Serial" maxlength="2" required formControlName="billPledgeSerial" > -->
+    <!-- </mat-form-field> --> -->
 
-      <mat-form-field class="example-full-width">
+      <!-- <mat-form-field class="example-full-width">
         <mat-label>Shop Address</mat-label>
         <textarea matInput placeholder="Enter Customer Address" formControlName="shopAddress"></textarea>
       </mat-form-field>
@@ -155,12 +174,12 @@
         <mat-label>PAWN_TICKET</mat-label>
         <mat-label></mat-label>
         <input  matInput placeholder="Enter PAWN_TICKET" formControlName="PAWN_TICKET">
-    </mat-form-field>
+    </mat-form-field> -->
     
 
       <div>
         <button class="btn btn-primary" > SAVE </button>
-        <button type="reset" (click)="billform.reset()">RESET</button>
+        <button type="reset" (click)="settingForm.reset()">RESET</button>
         <button>Print</button><button>Search</button>
       </div>
     </form>

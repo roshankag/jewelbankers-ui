@@ -17,7 +17,7 @@
 <p>Searching made easy.......</p>
 
 <div>
-    <form action="" [formGroup]="billform"  (ngSubmit)="onSubmit(billform)">
+    <form action="" [formGroup]="searchform"  (ngSubmit)="onSubmit(searchform)">
   <mat-form-field class="example-full-width">
     <mat-label>Search</mat-label>
     <input matInput formControlName="name" [formControl]="myControl" placeholder="Enter Customer Name or Address" [matAutocomplete]="auto" formControlName="search">
@@ -28,8 +28,8 @@
     </mat-autocomplete>
   </mat-form-field>
   <div class="button">
-    <button  class="btn btn-primary">Search</button>
-    <button type="reset" (click)="billform.reset()">RESET</button>
+    <button   class="btn btn-primary">Search</button>
+    <button type="reset" (click)="searchform.reset()">RESET</button>
     <button>Print</button>
   </div>
   </form>
@@ -37,7 +37,36 @@
 
 <div class="results">
   <mat-label id="results">Results</mat-label>
-  <!-- Add a display for selected customer details if needed -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Bill Serial</th>
+        <th>Bill No</th>
+        <th>Customer Name</th>
+        <th>Address</th>
+        <th>Weight (grams)</th>
+        <th>Amount</th>
+        <th>Product Description</th>
+        <th>Bill Date</th>
+        <th>Amount in Words</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let bill of bills">
+        <td>{{ bill.billSerial }}</td>
+        <td>{{ bill.billNo }}</td>
+        <td>{{ bill.customer?.customerName }}</td>
+        <td>{{ bill.customer?.street }}, {{ bill.customer?.area }}, {{ bill.customer?.district }}, {{ bill.customer?.country }} - {{ bill.customer?.pincode }}</td>
+        <td>{{ bill.grams }}</td>
+        <td>{{ bill.amount }}</td>
+        <!-- <td>{{ bill?.bill[0]?.productDescription }}</td> Assuming there's only one product in billDetails -->
+        <td>{{ bill.billDate  }}</td>
+        <td>{{ bill.amountInWords }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+
 </div>
 
 <footer>
