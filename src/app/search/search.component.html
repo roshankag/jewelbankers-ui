@@ -1,1 +1,45 @@
-<p>search works!</p>
+<header>
+    <nav>
+        <ul>
+            <li><a routerLink="/Search" href="\">Search</a></li>
+            <li><a routerLink="/pledge" href="\pledge">Pledge Bill</a></li>
+            <li><a routerLink="/redeem" href="\redeem">Redeem Bill</a></li>
+            <li><a routerLink="/print" href="\print">Print</a></li>
+            <li><a routerLink="/ledger" href="\ledger">Ledger</a></li>
+            <li><a routerLink="/setting" href="\setting">Settings</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+<h1>Search</h1>
+<p>Searching made easy.......</p>
+
+<div>
+    <form action="" [formGroup]="billform"  (ngSubmit)="onSubmit(billform)">
+  <mat-form-field class="example-full-width">
+    <mat-label>Search</mat-label>
+    <input matInput formControlName="name" [formControl]="myControl" placeholder="Enter Customer Name or Address" [matAutocomplete]="auto" formControlName="search">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <div class="button">
+    <button  class="btn btn-primary">Search</button>
+    <button type="reset" (click)="billform.reset()">RESET</button>
+    <button>Print</button>
+  </div>
+  </form>
+</div>
+
+<div class="results">
+  <mat-label id="results">Results</mat-label>
+  <!-- Add a display for selected customer details if needed -->
+</div>
+
+<footer>
+  &copy; 2024 Your Company Name
+</footer>

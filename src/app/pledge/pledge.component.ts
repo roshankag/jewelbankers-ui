@@ -51,6 +51,7 @@ export class PledgeComponent implements OnInit {
     selectedCustomer: Customer | undefined;
 isSuccess: boolean = false;
 alertMessage: string = "";
+  isExistingCustomer: boolean=false;
   
 
     constructor(private fb: FormBuilder, private router: Router,private http:HttpClient,private renderer: Renderer2) {
@@ -58,7 +59,7 @@ alertMessage: string = "";
         billSerial: [{disabled: false},[ Validators.maxLength(2)]],
         billNo: ['', [ Validators.maxLength(5)]],
         customerName: [''],
-        id: ['', [ Validators.maxLength(8)]],
+        customerid: ['', [ Validators.maxLength(8)]],
         Address: ['', []],
         fullAddress: ['', []],
         productTypeNo: ['', []],
@@ -104,13 +105,17 @@ alertMessage: string = "";
 
         }
 
-    private _filter(value: string): string[] {
-      const filterValue = value.toLowerCase();
-      // Filter options based on customerName and map to an array of strings
-      return this.options.filter(option => option.customerName.toLowerCase().includes(filterValue))
-                          .map(filteredOption => filteredOption.customerName);
-    }
-    
+            private _filter(value: string): string[] {
+              if (!value) {
+                return [];
+              }
+          
+              const filterValue = value.toLowerCase();
+              // Filter options based on customerName and map to an array of strings
+              return this.options.filter(option =>
+                option.customerName ? option.customerName.toLowerCase().includes(filterValue) : false
+              ).map(filteredOption => filteredOption.customerName);
+            }
 
     getBillDetails(){
       const billDetail : BillDetail = {
@@ -124,14 +129,16 @@ alertMessage: string = "";
       return billDetails;
     }
 
-    getCustomer(){
+    getCustomer(customerName:any){
+
+      
       const customer : Customer = {
-        "id": parseInt(this.billform.get('id')?.value),
+        "customerid": parseInt(this.billform.get('id')?.value),
         "area": "KELLAMBAKKAM",
         "email": null,
         "state": "TAMIL NADU",
         "pincode": 603103,
-        "customerName": this.billform.get('customerName')?.value,
+        "customerName": customerName,
         "street": "THAIYUR",
         "district": "KANCHEEPURAM",
         "country": "INDIA",
@@ -144,6 +151,10 @@ alertMessage: string = "";
       return customer;
     }
     onSubmit(form:any) {
+      const customerName = this.myControl.value;
+      
+      console.log("Customer Name:"+this.myControl.value)
+
       if (this.billform.valid) {
       console.log('Form submitted')
       console.log(this.billform.value);
@@ -166,7 +177,7 @@ alertMessage: string = "";
         billRedemSerial: this.billform.get('billRedemSerial')?.value != null?this.billform.get('billRedemSerial')?.value:null,
         billRedemNo: parseInt(this.billform.get('billRedemNo')?.value),
         comments: this.billform.get('comments')?.value != null?this.billform.get('comments')?.value:null,
-        customer: this.getCustomer(),
+        customer: this.getCustomer(customerName),
         rateOfInterest: 0,
         billDetails: this.getBillDetails()
       }
@@ -228,15 +239,17 @@ alertMessage: string = "";
     onCustomerSelected(customerName: string) {
       console.log('called');
       const selectedCustomer = this.options.find(option => option.customerName === customerName);
-      if (selectedCustomer) {
+      if (selectedCustomer) {        
         console.log("selected");
         const fullAddress1 = `${selectedCustomer.area}, ${selectedCustomer.street}, ${selectedCustomer.district}, ${selectedCustomer.country} - ${selectedCustomer.pincode}`;
         console.log(fullAddress1)
         this.billform.patchValue({ fullAddress: fullAddress1 });
         this.billform.patchValue({customerName:selectedCustomer.customerName});
-        this.billform.patchValue({ id: selectedCustomer.id });
-        this.billform.patchValue({ phone: selectedCustomer.id });
+        this.billform.patchValue({ customerid: selectedCustomer.customerid });
+        console.log("Customer Name:"+this.myControl.value)
+        this.billform.patchValue({ phone: selectedCustomer.customerid });
       }
+
     }
     updateAmountInWords(event: Event) {
       const inputElement = event.target as HTMLInputElement;

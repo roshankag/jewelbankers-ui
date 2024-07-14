@@ -7,6 +7,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { SettingComponent } from './setting/setting.component';
+import { SearchComponent } from './search/search.component';
 
 
 export const routes: Routes = [
@@ -16,6 +17,7 @@ export const routes: Routes = [
     {path: 'redeem', component: RedeemComponent},
     {path: 'addcustomer', component: AddCustomerComponent},
     {path: 'setting', component: SettingComponent},
+    {path:'Search', component: SearchComponent  }
 
 
 ];

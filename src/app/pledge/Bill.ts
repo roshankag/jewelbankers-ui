@@ -1,5 +1,6 @@
 import { Data } from "@angular/router";
 import { BillDetail } from "./BillDetails";
+import { Customer } from "../add-customer/Customer";
 
 
 export interface Bill {
@@ -7,7 +8,7 @@ export interface Bill {
     billSerial: string;
     billNo: number;
     billDate: string;
-    customer: any;
+    customer: Customer;
     careOf: string;
     productTypeNo: number;
     rateOfInterest: number;
