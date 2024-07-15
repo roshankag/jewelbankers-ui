@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8003/api/users/list'; // Update with your actual API endpoint
+  private apiUrl = 'http://localhost:8003/'; // Update with your actual API endpoint
 
   constructor(private http: HttpClient) { }
 
@@ -16,7 +16,7 @@ export class UserService {
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
-    return this.http.get<any[]>(this.apiUrl, { headers });
+    return this.http.get<any[]>(this.apiUrl + 'api/users/list', { headers });
   }
 
 
@@ -26,6 +26,6 @@ export class UserService {
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
-    return this.http.post<any>(this.apiUrl, user, { headers });
+    return this.http.post<any>(this.apiUrl + 'api/auth/signup', user, { headers });
   }
 }
