@@ -3,6 +3,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "types": ["gapi.auth2"],
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,

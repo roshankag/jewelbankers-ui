@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,38 +12,129 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import {OnInit} from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
+import {AuthService} from '../auth.service';
+import { NgxToastNotifyService } from 'ngx-toast-notify';
+import { AppConstants } from '../common/appconstants';
+import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
 
+declare var google: any; 
 
 @Component({
   selector: 'app-home',
-  standalone: true,
-  imports: [AsyncPipe,CommonModule, RouterModule, ReactiveFormsModule,HttpClientModule,MatListModule,MatCardModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 
 export class HomeComponent implements OnInit {
+  googleURL = AppConstants.GOOGLE_AUTH_URL;
   loginForm : FormGroup;
   public preciousMetals$: PreciousMetals = new PreciousMetals;
-  constructor(private fb: FormBuilder, private router: Router,private http:HttpClient,) {
+  apiUrl: any = "http://localhost:8003";
+  constructor(private fb: FormBuilder, private router: Router,private http:HttpClient,private authService: AuthService,  private toastr: NgxToastNotifyService) {
     this.loginForm= new FormGroup({
       username: new FormControl("",[Validators.required,Validators.maxLength(21)]),
       password: new FormControl("",[Validators.required,Validators.maxLength(21)])
     })
   }
 
-  
+  login(form:any) {
+    this.authService.signIn(this.loginForm.value.username, this.loginForm.value.password).subscribe(
+      response => {
+        console.log('Login successful', response);
+        this.toastr.showToast("Login successful", "success", "top-left");
+        console.log(response.roles);
+        
+        console.log(response.roles.filter((item: string) => item == "ROLE_ADMIN")>0);
+        console.log(response.roles.filter((item: string) => item == "ROLE_USER"));
+        
+        if(response.roles.filter((item: string) => item == "ROLE_ADMIN").length>0){
+          this.router.navigate(['/admin-dashboard']);
+        }else if(response.roles.filter((item: string) => item == "ROLE_USER").length>0){
+          this.router.navigate(['/addcustomer']);
+        }
+      },
+      error => {
+        console.error('Login failed', error);
+        this.toastr.showToast(error?.error?.message || 'Error', "danger", "top-left");
+      }
+    );
+  }
+
+  decodeJWTToken(token: string){
+    return JSON.parse(atob(token.split(".")[1]))
+  }
+  handleOauthResponse(response: { credential: any; }){
+    console.log(response);
+    
+    const responsePayload = this.decodeJWTToken(response.credential)
+    console.log(responsePayload)
+    sessionStorage.setItem('loggedinUser',JSON.stringify(responsePayload))
+    // window.location('/your-desired-place') 
+    //Changed the above URL where you want user to be redirected
+  }
+
+  initGoogleSignIn() {
+    google.accounts.id.initialize({
+      client_id: "652919857197-t0gtmj7oqs7qrje4nfecln53he2d2spd.apps.googleusercontent.com",
+      callback: this.handleGoogleSignInResponse.bind(this)
+    });
+    google.accounts.id.renderButton(document.getElementById('google-signin-button'), {
+      theme: 'outline',
+      size: 'large'
+    });
+  }
+
+  handleGoogleSignInResponse(response: any) {
+    if (response.error) {
+      console.error('Google Sign-In error:', response.error);
+      // Handle error
+    } else {
+      const idToken = response.credential;
+      // Send idToken to backend for validation and JWT generation
+      this.sendTokenToBackend(idToken);
+    }
+  }
+
+  sendTokenToBackend(idToken: string) {
+    // Send idToken to backend for validation and JWT generation
+    this.http.post<any>(`${this.apiUrl}/social/loginSuccess`, { credential: idToken })
+      .subscribe(
+        response => {
+          if (response && response.token) {
+            this.saveToken(response.token);
+            this.router.navigate(['/admin-dashboard']); // Navigate to dashboard or any secured route
+          } else {
+            console.error('Failed to receive token');
+            // Handle error
+          }
+        },
+        error => {
+          console.error('Error processing login:', error);
+          // Handle error
+        }
+      );
+  }
+
+  saveToken(token: string) {
+    sessionStorage.setItem('accessToken', token); // Save token in cookie for 7 days (adjust as needed)
+  }
 
   ngOnInit(){
+    this.initGoogleSignIn();
+    console.log(this.authService.getUserData());
+    
+    if(this.authService.getUserData().accessToken && this.authService.getUserData().roles?.includes('ROLE_ADMIN')){
+      this.router.navigate(['/login'])
+    }
     // this.fetch();
-    this.fetch();
+    // this.fetch();
   }
 
   onSubmit(form:any) {
     if (this.loginForm.valid) {
     console.log('Form submitted')
     console.log(this.loginForm.value);
-    this.router.navigate(['/login'])
+    // this.router.navigate(['/login'])
     }
   }
   public  fetch(){
@@ -53,6 +144,9 @@ export class HomeComponent implements OnInit {
         // this.preciousMetals$ = resp;
       }
     )
+  }
+
+  signInWithGoogle(): void {
   }
 }
 class PreciousMetals{
