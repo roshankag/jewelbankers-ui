@@ -7,6 +7,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { SettingComponent } from './setting/setting.component';
+import { SearchComponent } from './search/search.component';
 
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
@@ -45,6 +46,7 @@ export const routes: Routes = [
     {path: 'setting', component: SettingComponent},
     {path: 'admin-dashboard', component: AdminDashboardComponent},
     {path: 'reset-password', component: NewPasswordComponent},
+    {path:'Search', component: SearchComponent  }
 
 ];
 
@@ -76,6 +78,4 @@ export const routes: Routes = [
     },],
     declarations: [HomeComponent,AdminDashboardComponent,AddUserDialogComponent,ForgotPasswordComponent,NewPasswordComponent]
   })
-  export class AppRoutingModule { 
-  
-  }
+  export class AppRoutingModule {}

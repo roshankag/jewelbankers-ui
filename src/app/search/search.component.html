@@ -1,1 +1,74 @@
-<p>search works!</p>
+<header>
+    <nav>
+        <ul>
+            <li><a routerLink="/Search" href="\">Search</a></li>
+            <li><a routerLink="/pledge" href="\pledge">Pledge Bill</a></li>
+            <li><a routerLink="/redeem" href="\redeem">Redeem Bill</a></li>
+            <li><a routerLink="/print" href="\print">Print</a></li>
+            <li><a routerLink="/ledger" href="\ledger">Ledger</a></li>
+            <li><a routerLink="/setting" href="\setting">Settings</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+<h1>Search</h1>
+<p>Searching made easy.......</p>
+
+<div>
+    <form action="" [formGroup]="searchform"  (ngSubmit)="onSubmit(searchform)">
+  <mat-form-field class="example-full-width">
+    <mat-label>Search</mat-label>
+    <input matInput formControlName="name" [formControl]="myControl" placeholder="Enter Customer Name or Address" [matAutocomplete]="auto" formControlName="search">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <div class="button">
+    <button   class="btn btn-primary">Search</button>
+    <button type="reset" (click)="searchform.reset()">RESET</button>
+    <button>Print</button>
+  </div>
+  </form>
+</div>
+
+<div class="results">
+  <mat-label id="results">Results</mat-label>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Bill Serial</th>
+        <th>Bill No</th>
+        <th>Customer Name</th>
+        <th>Address</th>
+        <th>Weight (grams)</th>
+        <th>Amount</th>
+        <th>Product Description</th>
+        <th>Bill Date</th>
+        <th>Amount in Words</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let bill of bills">
+        <td>{{ bill.billSerial }}</td>
+        <td>{{ bill.billNo }}</td>
+        <td>{{ bill.customer?.customerName }}</td>
+        <td>{{ bill.customer?.street }}, {{ bill.customer?.area }}, {{ bill.customer?.district }}, {{ bill.customer?.country }} - {{ bill.customer?.pincode }}</td>
+        <td>{{ bill.grams }}</td>
+        <td>{{ bill.amount }}</td>
+        <!-- <td>{{ bill?.bill[0]?.productDescription }}</td> Assuming there's only one product in billDetails -->
+        <td>{{ bill.billDate  }}</td>
+        <td>{{ bill.amountInWords }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+</div>
+
+<footer>
+  &copy; 2024 Your Company Name
+</footer>

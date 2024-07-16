@@ -1,1 +1,186 @@
-<p>setting works!</p>
+
+<header>
+    <a href="/">Search</a>
+    <a href="/login">Home</a>
+    <a href="/redeem">Redeem Bill</a>
+    <a href="/print">Print</a>
+    <a href="/ledger">Ledger</a>
+    <a href="/setting">Setting</a>
+  </header>
+  <section>
+  
+    <form [formGroup]="settingForm" (ngSubmit)="onSubmit(settingForm)">
+      <table *ngIf="filteredOptions | async as list"><tr> 
+        <th>ID</th>
+        <th>Value</th>
+        <th>Example</th>
+      </tr>
+        <div *ngFor="let setting of list">
+          <tr>
+          <!-- <td>paramSeq:{{ setting.paramSeq }}</td> -->
+          <td>{{ setting.paramId }}</td>
+          <td>
+          <mat-form-field class="example-full-width" id="bsno">         
+          <input #bsnoInput id="bsno" matInput placeholder="Update Value" required formControlName="billPledgeSerial" >
+        </mat-form-field></td>
+          <td>{{ setting.paramExample }}</td> 
+        </tr>
+        </div>
+      </table>
+ 
+    
+  
+      <!-- <mat-form-field class="example-full-width" id="bsno">
+        <mat-label>{{settings}}</mat-label>
+        <mat-label></mat-label>
+        <!-- <input #bsnoInput id="bsno" matInput placeholder="Enter Bill Serial" maxlength="2" required formControlName="billPledgeSerial" > -->
+    <!-- </mat-form-field> --> -->
+
+      <!-- <mat-form-field class="example-full-width">
+        <mat-label>Shop Address</mat-label>
+        <textarea matInput placeholder="Enter Customer Address" formControlName="shopAddress"></textarea>
+      </mat-form-field>
+
+      <mat-form-field floatLabel="always">
+        <mat-label>Rate Of Intrest(SILVER)</mat-label>
+        <input matInput type="number" class="example-right-align" placeholder="Enter Intrest" value="48" formControlName="roiSilver">
+        <span matTextPrefix></span>
+      </mat-form-field>
+
+      <mat-form-field floatLabel="always">
+        <mat-label>Rate Of Intrest(GOLD)</mat-label>
+        <input matInput type="number" class="example-right-align" placeholder="Enter Intrest" value="36" formControlName="roiGold">
+        <span matTextPrefix></span>
+      </mat-form-field>
+
+      <mat-form-field floatLabel="always">
+        <mat-label>RECORDS PER PAGE</mat-label>
+        <input matInput type="number" class="example-right-align" placeholder="Enter Records need per page" value="36" formControlName="recordsPerPage">
+        <span matTextPrefix></span>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" id="bsno">
+        <mat-label>Current Redemption No.</mat-label>
+        <mat-label></mat-label>
+        <input #bsnoInput id="bsno" matInput placeholder="Enter Bill Serial" maxlength="2" required formControlName="billRedemptionSerial">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+        <mat-label>RED DETAILS</mat-label>
+        <textarea matInput placeholder="TIME AGREE UPON FOR A REDEMPTION OF THE ARTICLE IS ONE YEAR" formControlName="RED_DETAILS" value=""></textarea>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>ROI DETAILS</mat-label>
+        <textarea matInput placeholder="THE RATE OF INTEREST CHARGED AT 16% PER ANNUM" formControlName="ROI_DETAILS" value=""></textarea>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label> SEC_RULE</mat-label>
+        <textarea matInput placeholder="FROM F '(SEC. 7 & RULE 8')" formControlName="SEC_RULE" value=""></textarea>
+      </mat-form-field>
+        
+        
+    <mat-form-field class="example-full-width" >
+        <mat-label>Country</mat-label>
+        <mat-label></mat-label>
+        <input  matInput placeholder="Enter Country" formControlName="country">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+        <mat-label>DISTRICT</mat-label>
+        <input type="text"
+               placeholder="DISTRICT"
+               aria-label="Number"
+               matInput
+               [formControl]="myControl"
+               formControlName="district"
+               [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field class="example-full-width" >
+        <mat-label>DATABASE_IPADDRESS</mat-label>
+        <mat-label></mat-label>
+        <input  matInput placeholder="Enter DATABASE_IPADDRESS" formControlName="DATABASE_IPADDRESS">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" >
+        <mat-label>DATABASE_NAME</mat-label>
+        <mat-label></mat-label>
+        <input  matInput placeholder="Enter DATABASE_NAME" formControlName="DATABASE_NAME" >
+    </mat-form-field>
+
+
+
+    <mat-form-field class="example-full-width" >
+        <mat-label>LICENCE_NO</mat-label>
+        <mat-label></mat-label>
+        <input  matInput placeholder="I PROMISE TO MY MONTHLY INCOME RS." formControlName="LICENCE_NO">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" >
+        <mat-label>MONTHLY_INCOME</mat-label>
+        <mat-label></mat-label>
+        <input  matInput placeholder="Enter MONTHLY_INCOME" formControlName="MONTHLY_INCOME">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" >
+        <mat-label>MYSQL_DB_PASSWORD</mat-label>
+        <mat-label></mat-label>
+        <input  matInput placeholder="Enter MYSQL_DB_PASSWORD" formControlName="MYSQL_DB_PASSWORD">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" >
+        <mat-label>MYSQL_DB_PATH</mat-label>
+        <mat-label></mat-label>
+        <input  matInput placeholder="C:\\PROGRAM FILES (X86)\\MYSQL\\MYSQL SERVER 5.1\\BIN" formControlName="MYSQL_DB_PATH">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" >
+        <mat-label>MYSQL_DB_USER_ID</mat-label>
+        <mat-label></mat-label>
+        <input  matInput placeholder="Enter MYSQL_DB_USER_ID" formControlName="MYSQL_DB_USER_ID">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" >
+        <mat-label>MYSQL_DRIVER</mat-label>
+        <mat-label></mat-label>
+        <input  matInput placeholder="COM.MYSQL.JDBC.DRIVER" formControlName="MYSQL_DRIVER">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" >
+        <mat-label>MYSQL_PORT</mat-label>
+        <mat-label></mat-label>
+        <input  matInput placeholder="3306" formControlName="MYSQL_PORT">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" >
+        <mat-label>MYSQL_URL</mat-label>
+        <mat-label></mat-label>
+        <input  matInput placeholder="JDBC:MYSQL" formControlName="MYSQL_URL">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" >
+        <mat-label>PAWNER_SIGN</mat-label>
+        <mat-label></mat-label>
+        <input  matInput placeholder="SIG. OF PAWN BROKER/AGENT" formControlName="PAWNER_SIGN">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" >
+        <mat-label>PAWN_TICKET</mat-label>
+        <mat-label></mat-label>
+        <input  matInput placeholder="Enter PAWN_TICKET" formControlName="PAWN_TICKET">
+    </mat-form-field> -->
+    
+
+      <div>
+        <button class="btn btn-primary" > SAVE </button>
+        <button type="reset" (click)="settingForm.reset()">RESET</button>
+        <button>Print</button><button>Search</button>
+      </div>
+    </form>
+</section>

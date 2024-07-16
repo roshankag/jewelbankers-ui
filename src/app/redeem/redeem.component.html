@@ -1,32 +1,40 @@
+<header>
+    <a href="/Search">Search</a>
+    <a href="/pledge">Pledge Bill</a>
+    <a href="/login">Home</a>
+    <a href="/print">Print</a>
+    <a href="/ledger">Ledger</a>
+    <a href="/setting">Setting</a>
+  </header>
   <section>
     <br><br><br>
-    <form action="/login" [formGroup]="redeemform"  (ngSubmit)="onSubmit(redeemform)">
+    <form action="/login" [formGroup]="redeemform"  (ngSubmit)="onRedemSubmit()">
         <mat-form-field class="example-full-width">
             <mat-label>Redemption Bill No.</mat-label>
             <mat-label></mat-label>
-            <input matInput placeholder="Enter Customer Name" maxlength="2" required formControlName="redeemserial">
+            <input matInput placeholder="Enter billRedemSerialNo" maxlength="2" required formControlName="billRedemSerial">
           </mat-form-field>
           <mat-form-field floatLabel="always">
             <mat-label></mat-label>
-            <input matInput type="number" class="example-right-align" placeholder="00000"  formControlName="redeemno">
+            <input matInput type="number" class="example-right-align" placeholder="Enter billRedemNo"  formControlName="billRedemNo">
           </mat-form-field>
           <mat-form-field>
             <mat-label>Redeeming Date</mat-label>
-            <input matInput [matDatepicker]="dp" formControlName="redeemdate">
+            <input matInput [matDatepicker]="dp" formControlName="redemptionDate">
             <mat-hint>MMMM DD, YYYY</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
             <mat-datepicker #dp></mat-datepicker>
           </mat-form-field>
           <mat-form-field floatLabel="always">
             <mat-label>Intrest</mat-label>
-            <input matInput type="number" class="example-right-align" placeholder="0" formControlName="intrest">
+            <input matInput type="number" class="example-right-align" placeholder="0" formControlName="redemptionInterest">
             <span matTextPrefix>₹</span>
             <span matTextSuffix>.00</span>
           </mat-form-field>
           <br>
           <mat-form-field floatLabel="always">
             <mat-label>Total Amount</mat-label>
-            <input matInput type="number" class="example-right-align" placeholder="0" formControlName="total">
+            <input matInput type="number" class="example-right-align" placeholder="0" formControlName="redemptionTotal">
             <span matTextPrefix>₹</span>
             <span matTextSuffix>.00</span>
           </mat-form-field>
@@ -34,95 +42,97 @@
           
         <!-- bill details -->
       <mat-form-field class="example-full-width">
-        <mat-label>Bill No.</mat-label>
+        <mat-label>Bill Serial.</mat-label>
         <mat-label></mat-label>
         <input matInput placeholder="Enter Customer Name" maxlength="2" required formControlName="billSerial">
       </mat-form-field>
       <mat-form-field floatLabel="always">
-        <mat-label></mat-label>
-        <input matInput type="number" class="example-right-align" placeholder="00000"  formControlName="billno">
+        <mat-label>BillNo.</mat-label>
+        <input matInput type="number" class="example-right-align" placeholder="00000" (input)="onBillSelected($event)" formControlName="billNo">
       </mat-form-field>
-      <mat-form-field class="example-full-width">
-        <mat-label>Customer Name</mat-label>
-        <input matInput placeholder="Enter Customer Name" formControlName="name">
-      </mat-form-field>
+      <div *ngIf="bill">
+      <div class="example-full-width">
+        <mat-label>Customer Name{{ bill.customer.customerName }}</mat-label>
+        <!-- <input matInput placeholder="Enter Customer Name" formControlName="name"> -->
+      </div>
       <br>
-      <mat-form-field floatLabel="always">
-        <mat-label>Customer ID</mat-label>
-        <input matInput type="number" class="example-right-align" placeholder=""formControlName="customerid">
+      <div floatLabel="always">
+        <mat-label>Customer ID{{ bill.customer.customerid }}</mat-label>
+        <!-- <input matInput type="number" class="example-right-align" placeholder=""formControlName="customerid"> -->
         <span matTextPrefix></span>
-      </mat-form-field>
+      </div>
       <br>
-      <mat-form-field class="example-full-width">
-        <mat-label>Customer Address</mat-label>
-        <textarea matInput placeholder="Enter Customer Address" formControlName="adrress"></textarea>
-      </mat-form-field>
+      <div class="example-full-width">
+        <mat-label>Customer Address{{ bill.customer.address }}</mat-label>
+        <!-- <textarea matInput placeholder="Enter Customer Address" formControlName="adrress"></textarea> -->
+      </div>
       <br>
-      <mat-form-field>
-        <mat-label>Article</mat-label>
-        <mat-select formControlName="article">
+      <div>
+        <mat-label>Article{{ bill.productTypeNo }}</mat-label>
+        <!-- <mat-select formControlName="article">
           <mat-option value="5">Gold</mat-option>
           <mat-option value="3">Silver</mat-option>
           <mat-option value="6">Bronze</mat-option>
           <mat-option value="7">Copper</mat-option>
           <mat-option value="Others">Others</mat-option>
-        </mat-select>
-      </mat-form-field>
+        </mat-select> -->
+      </div>
       <br>
-      <mat-form-field floatLabel="always">
-        <mat-label>Amount</mat-label>
-        <input matInput type="number" class="example-right-align" placeholder="0" formControlName="amount">
+      <div floatLabel="always">
+        <mat-label>Amount:{{ bill.amount }}</mat-label>
+        <!-- <input matInput type="number" class="example-right-align" placeholder="0" formControlName="amount"> -->
         <span matTextPrefix>₹</span>
         <span matTextSuffix>.00</span>
-      </mat-form-field>
+      </div>
       <br>
-      <mat-form-field floatLabel="always">
-        <mat-label>Present Value</mat-label>
-        <input matInput type="number" class="example-right-align" placeholder="0" formControlName="presentvalue">
+      <div floatLabel="always">
+        <mat-label>Present Value:{{ bill.presentValue }}</mat-label>
+        <!-- <input matInput type="number" class="example-right-align" placeholder="0" formControlName="presentvalue"> -->
         <span matTextPrefix>₹</span>
         <span matTextSuffix>.00</span>
-      </mat-form-field>
+      </div>
       <br>
-      <mat-form-field>
-        <mat-label>Pledge Date</mat-label>
-        <input matInput [matDatepicker]="dp" formControlName="date">
-        <mat-hint>MMMM DD, YYYY</mat-hint>
-        <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
-        <mat-datepicker #dp></mat-datepicker>
-      </mat-form-field>
+      <div>
+        <mat-label>Pledge Date{{ bill.billDate }}</mat-label>
+        <!-- <input matInput [matDatepicker]="dp" formControlName="date"> -->
+        <!-- <mat-hint>MMMM DD, YYYY</mat-hint> -->
+        <!-- <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+        <mat-datepicker #dp></mat-datepicker> -->
+      </div>
       <br>
-      <mat-form-field floatLabel="always">
-        <mat-label>Weight</mat-label>
-        <input matInput type="number" class="example-right-align" placeholder="0" formControlName="weight">
+      <div floatLabel="always">
+        <mat-label>Weight{{ bill.grams }}</mat-label>
+        <!-- <input matInput type="number" class="example-right-align" placeholder="0" formControlName="weight"> -->
         <span matTextPrefix></span>
         <span matTextSuffix>gms</span>
-      </mat-form-field>
+      </div>
       <br>
-      <mat-form-field floatLabel="always">
-        <mat-label>Quantity</mat-label>
-        <input matInput type="number" class="example-right-align"  value="1" formControlName="quantity">
+      <div floatLabel="always">
+        <mat-label>Quantity{{ bill.billDetails[0].productQuantity }}</mat-label>
+        <!-- <input matInput type="number" class="example-right-align"  value="1" formControlName="quantity"> -->
         <span matTextPrefix></span>
-      </mat-form-field>
+      </div>
       <br>
-      <mat-form-field class="example-full-width">
-        <mat-label>Item Description</mat-label>
-        <textarea matInput placeholder="Ex.One gold...." formControlName="description"></textarea>
-      </mat-form-field>
+      <div class="example-full-width">
+        <mat-label>Item Description{{ bill.billDetails[0].productDescription}}</mat-label>
+        <!-- <textarea matInput placeholder="Ex.One gold...." formControlName="description"></textarea> -->
+      </div>
       <br>
-      <mat-form-field floatLabel="always">
-        <mat-label>Rate Of Intrest</mat-label>
-        <input matInput type="number" class="example-right-align" placeholder="Enter Intrest" value="36"formControlName="roi">
+      <div floatLabel="always">
+        <mat-label>Rate Of Intrest{{ bill.rateOfInterest }}</mat-label>
+        <!-- <input matInput type="number" class="example-right-align" placeholder="Enter Intrest" value="36"formControlName="roi"> -->
         <span matTextPrefix></span>
-      </mat-form-field>
+      </div>
       <br>
-      <mat-form-field class="example-full-width">
-        <mat-label>Amount in Words</mat-label>
-        <textarea matInput placeholder="" formControlName="amountinwords"></textarea>
-      </mat-form-field>
+      <div class="example-full-width">
+        <mat-label>Amount in Words{{ bill.amountInWords }}</mat-label>
+        <!-- <textarea matInput placeholder="" formControlName="amountinwords"></textarea> -->
+      </div>
+    </div>
       <div>
-        <button class="btn btn-primary" > SAVE </button>
+        <button type="submit" class="btn btn-primary">REDEM</button> 
         <button type="reset" (click)="redeemform.reset()">RESET</button>
-        <button>Print</button><button>Search</button>
+        <button>Print</button>
       </div>
     </form>
   </section>
