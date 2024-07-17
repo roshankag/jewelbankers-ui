@@ -74,14 +74,16 @@ export class HomeComponent implements OnInit {
   }
 
   initGoogleSignIn() {
-    google.accounts.id.initialize({
-      client_id: "652919857197-t0gtmj7oqs7qrje4nfecln53he2d2spd.apps.googleusercontent.com",
-      callback: this.handleGoogleSignInResponse.bind(this)
-    });
-    google.accounts.id.renderButton(document.getElementById('google-signin-button'), {
-      theme: 'outline',
-      size: 'large'
-    });
+    if(google){
+      google.accounts.id.initialize({
+        client_id: "652919857197-t0gtmj7oqs7qrje4nfecln53he2d2spd.apps.googleusercontent.com",
+        callback: this.handleGoogleSignInResponse.bind(this)
+      });
+      google.accounts.id.renderButton(document.getElementById('google-signin-button'), {
+        theme: 'outline',
+        size: 'large'
+      });
+    }
   }
 
   handleGoogleSignInResponse(response: any) {
