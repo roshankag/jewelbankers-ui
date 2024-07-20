@@ -106,7 +106,7 @@ export class AddCustomerComponent implements OnInit {
       
   }
     fetch() {
-      this.http.get<Data[]>('http://localhost:8080/customers').subscribe(
+      this.http.get<Data[]>('http://localhost:8080/jewelbankersapicustomers').subscribe(
         (resp) => {
           //console.log(resp);
           this.options = resp.map(customer => ({

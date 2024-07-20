@@ -68,7 +68,7 @@ export class SearchComponent implements OnInit {
   }
 
   fetch() {
-    this.http.get<Data[]>('http://localhost:8080/customers').subscribe(
+    this.http.get<Data[]>('http://localhost:8080/jewelbankersapicustomers').subscribe(
       (resp) => {
         console.log(resp);
         const names = resp.map(customer => customer.customerName);
@@ -114,10 +114,10 @@ export class SearchComponent implements OnInit {
       const searchvalue = this.myControl.value;
       console.log("searchvalue"+searchvalue)
       // if (customerName) {
-      //   const url =`http://localhost:8080/customers/search?customerName=${customerName}`
+      //   const url =`http://localhost:8080/jewelbankersapicustomers/search?customerName=${customerName}`
       if (searchvalue){
-        // const url = `http://localhost:8080/bills/number?billNo=${a}&billSerial=${billSerial}`;
-        const url = `http://localhost:8080/bills/search?customerName=${searchvalue}&billNo=${searchvalue}`
+        // const url = `http://localhost:8080/jewelbankersapibills/number?billNo=${a}&billSerial=${billSerial}`;
+        const url = `http://localhost:8080/jewelbankersapibills/search?customerName=${searchvalue}&billNo=${searchvalue}`
         this.http.get<[]>(url).subscribe(
           (response:any) => {
             console.log('Bill details:', response);

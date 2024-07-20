@@ -90,7 +90,7 @@ export class SettingComponent implements OnInit {
   }
 
   fetchSettings() {
-    this.http.get<Settings[]>('http://localhost:8080/settings').subscribe(
+    this.http.get<Settings[]>('http://localhost:8080/jewelbankersapisettings').subscribe(
       list => {
         this.settings=list;
       });

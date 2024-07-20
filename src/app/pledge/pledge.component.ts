@@ -198,7 +198,7 @@ alertMessage: string = "";
       }
   }
     fetch() {
-      this.http.get<Customer[]>('http://localhost:8080/customers').subscribe(
+      this.http.get<Customer[]>('http://localhost:8080/jewelbankersapicustomers').subscribe(
         (resp) => {
           // console.log(resp);
           this.options = resp.map(customer => ({
@@ -221,7 +221,7 @@ alertMessage: string = "";
   // .set('content-type', 'application/json')
   // .set('Access-Control-Allow-Origin', '*');  
 
-      this.http.post('http://localhost:8080/bills',body, {headers}).subscribe(
+      this.http.post('http://localhost:8080/jewelbankersapibills',body, {headers}).subscribe(
         (resp) => {
           //console.log(resp);
         },

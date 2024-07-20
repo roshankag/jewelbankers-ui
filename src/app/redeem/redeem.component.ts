@@ -63,7 +63,7 @@ export class RedeemComponent {
 
 
       billFetch(billNo:number,billSerial:string) {
-        this.http.get<Bill[]>(`http://localhost:8080/bills/number?billNo=${billNo}&billSerial=${billSerial}`).subscribe(
+        this.http.get<Bill[]>(`http://localhost:8080/jewelbankersapibills/number?billNo=${billNo}&billSerial=${billSerial}`).subscribe(
           (resp) => {
             console.log(resp);
             this.bill = resp[0];
@@ -88,7 +88,7 @@ export class RedeemComponent {
   
         // Make HTTP PUT request to update the bill details
         const id = this.bill.billSequence; // Replace with your bill ID
-        const updateUrl = `http://localhost:8080/bills/${id}`;
+        const updateUrl = `http://localhost:8080/jewelbankersapibills/${id}`;
         this.http.put(updateUrl, this.redeemform.value).subscribe(
           (response) => {
             console.log('Updated successfully:', response);
@@ -127,7 +127,7 @@ export class RedeemComponent {
   // .set('content-type', 'application/json')
   // .set('Access-Control-Allow-Origin', '*');  
 
-      this.http.post('http://localhost:8080/bills',body, {headers}).subscribe(
+      this.http.post('http://localhost:8080/jewelbankersapibills',body, {headers}).subscribe(
         (resp) => {
           //console.log(resp);
         },

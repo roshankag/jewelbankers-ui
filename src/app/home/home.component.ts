@@ -13,9 +13,9 @@ import {OnInit} from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
 import {AuthService} from '../auth.service';
-import { NgxToastNotifyService } from 'ngx-toast-notify';
+import { ToastrService } from 'ngx-toastr';
 import { AppConstants } from '../common/appconstants';
-import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
+import { GoogleLoginProvider, SocialAuthService } from '@abacritt/angularx-social-login';
 
 declare var google: any; 
 
@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
   loginForm : FormGroup;
   public preciousMetals$: PreciousMetals = new PreciousMetals;
   apiUrl: any = "http://localhost:8003";
-  constructor(private fb: FormBuilder, private router: Router,private http:HttpClient,private authService: AuthService,  private toastr: NgxToastNotifyService) {
+  constructor(private fb: FormBuilder, private router: Router,private http:HttpClient,private authService: AuthService,  private toastr: ToastrService) {
     this.loginForm= new FormGroup({
       username: new FormControl("",[Validators.required,Validators.maxLength(21)]),
       password: new FormControl("",[Validators.required,Validators.maxLength(21)])
@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
     this.authService.signIn(this.loginForm.value.username, this.loginForm.value.password).subscribe(
       response => {
         console.log('Login successful', response);
-        this.toastr.showToast("Login successful", "success", "top-left");
+        this.toastr.success("Login successful", "success", "top-left");
         console.log(response.roles);
         
         console.log(response.roles.filter((item: string) => item == "ROLE_ADMIN")>0);
@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
       },
       error => {
         console.error('Login failed', error);
-        this.toastr.showToast(error?.error?.message || 'Error', "danger", "top-left");
+        this.toastr.(error?.error?.message || 'Error', "danger", "top-left");
       }
     );
   }
@@ -138,7 +138,7 @@ export class HomeComponent implements OnInit {
     }
   }
   public  fetch(){
-    this.http.get('http://localhost:8080/users').subscribe(
+    this.http.get('http://localhost:8080/jewelbankersapiusers').subscribe(
       (resp:any)=>{
         console.log(resp);
         // this.preciousMetals$ = resp;
